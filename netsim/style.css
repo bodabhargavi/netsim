@@ -1,0 +1,39 @@
+:root{--bg:#eef3f1;--ink:#14272b;--teal:#0f766e;--amber:#d97706;--red:#b91c1c;--card:#fff;--line:#cfdcd8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:18px 24px}
+header h1{margin:0;font-size:2rem;letter-spacing:.5px}
+header p{margin:2px 0 0;color:#b8d2cd}
+main{max-width:1200px;margin:auto;padding:16px;display:grid;grid-template-columns:320px 1fr;gap:16px}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.panel h2,.panel h3{margin:0 0 8px}
+.controls{grid-row:span 3}
+.topo{position:relative}
+canvas{width:100%;max-width:100%}
+.presets,.btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+button{font:inherit;padding:7px 12px;border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:6px;cursor:pointer}
+button:hover:not(:disabled){background:#e3f3f0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.go{background:var(--teal);color:#fff}
+.preset.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+label{display:block;margin:10px 0}
+input[type=range]{width:100%}
+.note{font-size:.85rem;color:#4a6065;margin:6px 0 0}
+.center{text-align:center}
+.badge{position:absolute;top:12px;right:14px;padding:5px 14px;border-radius:20px;color:#fff;font-weight:600}
+.badge.normal{background:var(--teal)}.badge.moderate{background:var(--amber)}.badge.high{background:var(--red)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card span{display:block;font-size:.8rem;color:#4a6065}
+.card b{font-size:1.4rem}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+main>.panel:not(.controls):not(.topo),.charts,.metrics,#check{grid-column:2}
+.scroll{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{background:#e3f3f0}
+dt{font-weight:600;margin-top:8px}dd{margin:0 0 0 14px}
+#analysisBox li{margin:4px 0}
+@media(max-width:900px){main{grid-template-columns:1fr}.controls{grid-row:auto}main>.panel:not(.controls):not(.topo),.charts,.metrics,#check{grid-column:1}.metrics{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}

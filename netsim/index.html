@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetSim: Interactive Network Congestion Simulator</title>
+<link rel="stylesheet" href="style.css">
+<!-- Chart.js from CDN (internet needed once) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header><h1>NetSim</h1><p>Interactive Network Congestion Simulator. A simulation only; it never touches your real Wi-Fi.</p></header>
+<main>
+<section class="panel controls">
+  <h2>Controls</h2>
+  <div class="presets">
+    <button class="preset" data-preset="20">Low traffic</button>
+    <button class="preset" data-preset="45">Medium traffic</button>
+    <button class="preset" data-preset="90">High traffic</button>
+  </div>
+  <label>Packet arrival rate: <b id="arrivalVal">45</b> pkt/s<input type="range" id="arrival" min="1" max="200" value="45"></label>
+  <label>Router transmission rate: <b id="serviceVal">50</b> pkt/s<input type="range" id="service" min="1" max="200" value="50"></label>
+  <label>Max queue capacity: <b id="queueVal">30</b> packets<input type="range" id="queue" min="1" max="100" value="30"></label>
+  <label>Speed <select id="speed"><option value="1">1x</option><option value="2">2x</option><option value="5">5x</option></select></label>
+  <div class="btns">
+    <button id="btnStart" class="go">Start</button>
+    <button id="btnPause">Pause</button>
+    <button id="btnResume">Resume</button>
+    <button id="btnReset">Reset</button>
+  </div>
+  <p class="note">Settings can be changed while running. Time advances 0.1 s per step.</p>
+</section>
+
+<section class="panel topo">
+  <h2>Network topology</h2>
+  <canvas id="topo" width="900" height="280"></canvas>
+  <div id="statusBadge" class="badge normal">Normal</div>
+  <p id="statusWhy" class="note"></p>
+</section>
+
+<section class="metrics">
+  <div class="card"><span>Generated</span><b id="mGen">0</b></div>
+  <div class="card"><span>Delivered</span><b id="mDel">0</b></div>
+  <div class="card"><span>Dropped</span><b id="mDrop">0</b></div>
+  <div class="card"><span>Packet loss</span><b id="mLoss">0.0%</b></div>
+  <div class="card"><span>Avg queueing delay</span><b id="mDelay">0 ms</b></div>
+  <div class="card"><span>Throughput</span><b id="mThru">0.0 pkt/s</b></div>
+  <div class="card"><span>Queue length</span><b id="mQlen">0</b></div>
+  <div class="card"><span>Queue utilization</span><b id="mUtil">0.0%</b></div>
+</section>
+<p id="check" class="note center"></p>
+
+<section class="panel">
+  <h2>How the status is decided</h2>
+  <p>Queue utilization = queue length / capacity x 100. Packet loss = dropped / generated x 100.<br>
+  <b>High Congestion:</b> utilization &ge; 80% or loss &ge; 5%. <b>Moderate Congestion:</b> utilization &ge; 40% or any packet dropped. <b>Normal:</b> otherwise.</p>
+</section>
+
+<section class="charts">
+  <div class="panel"><h3>Queue length (packets)</h3><canvas id="cQueue"></canvas></div>
+  <div class="panel"><h3>Average queueing delay (ms)</h3><canvas id="cLatency"></canvas></div>
+  <div class="panel"><h3>Throughput (pkt/s)</h3><canvas id="cThru"></canvas></div>
+  <div class="panel"><h3>Cumulative drops</h3><canvas id="cDrops"></canvas></div>
+</section>
+
+<section class="panel">
+  <h2>Scenario comparison</h2>
+  <p>Runs Low (20), Medium (45) and High (90 pkt/s) for 60 simulated seconds each, using your current transmission rate and queue capacity and the same random seed.</p>
+  <button id="btnCompare" class="go">Run comparison</button>
+  <div class="scroll"><table id="cmpTable"><thead><tr><th>Scenario</th><th>Arrival (pkt/s)</th><th>Avg delay (ms)</th><th>Throughput (pkt/s)</th><th>Avg queue length</th><th>Packet loss (%)</th></tr></thead><tbody></tbody></table></div>
+  <canvas id="cCompare" height="110"></canvas>
+</section>
+
+<section class="panel">
+  <h2>Congestion analysis and recommendations</h2>
+  <div id="analysisBox"></div>
+  <p class="note">These are rule-based suggestions based on the simulated numbers. This tool does not change or fix any real network.</p>
+</section>
+
+<section class="panel">
+  <h2>Learn the terms</h2>
+  <dl>
+    <dt>Network congestion</dt><dd>Packets arrive faster than a link or router can forward them, so queues build up.</dd>
+    <dt>Packet switching</dt><dd>Data is split into packets that share links and are forwarded one by one.</dd>
+    <dt>Router queue</dt><dd>A buffer holding packets waiting for transmission. Here it is finite and FIFO (first in, first out).</dd>
+    <dt>Bandwidth</dt><dd>The maximum rate a link can send data. Here it is the router transmission rate in packets/s.</dd>
+    <dt>Latency</dt><dd>Delay a packet experiences. Here, the time spent waiting in the queue.</dd>
+    <dt>Throughput</dt><dd>The rate at which packets are actually delivered.</dd>
+    <dt>Packet loss</dt><dd>Packets discarded because the queue was full (tail drop).</dd>
+    <dt>Congestion control</dt><dd>Mechanisms such as TCP slowing its sending rate when loss or delay appears. This project does NOT implement TCP; it only shows the problem that such mechanisms solve.</dd>
+  </dl>
+</section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
